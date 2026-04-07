@@ -3,13 +3,7 @@
 
 
 <!-- PROJECT SHIELDS -->
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![project_license][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
-
+<!-- No Shields because it's private -->
 
 
 <!-- PROJECT LOGO -->
@@ -24,7 +18,7 @@
   <p align="center">
     A social media platform that encourages intentional living by combining a life expectancy countdown with collaborative bucket lists.
     <br />
-    <a href="https://github.com/re-nanashi/mori/docs"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/re-nanashi/mori/tree/main/docs"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <a href="https://github.com/re-nanashi/mori">View Demo</a>
@@ -56,7 +50,6 @@
     </li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
@@ -196,8 +189,6 @@ See the [open issues](https://github.com/re-nanashi/mori/issues) for a full list
 <!-- CONTRIBUTING -->
 ## Contributing
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
 If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
 Don't forget to give the project a star! Thanks again!
 
@@ -214,16 +205,6 @@ Don't forget to give the project a star! Thanks again!
 <a href="https://github.com/re-nanashi/mori/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=re-nanashi/mori" alt="contrib.rocks image" />
 </a>
-
-
-
-<!-- LICENSE -->
-## License
-
-Distributed under the Unlicense License. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- CONTACT -->
