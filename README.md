@@ -5,15 +5,14 @@
 <!-- PROJECT SHIELDS -->
 <!-- No Shields because it's private -->
 
+# mori: capturing life, together
 
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
   <a href="https://github.com/re-nanashi/mori">
-    <img src="images/logo.svg" alt="Logo" width="80" height="80">
+    <img src="images/logo.png" alt="Logo" width="150" height="150">
   </a>
-
-<h3 align="center">mori: capturing life, together</h3>
 
   <p align="center">
     A social media platform that encourages intentional living by combining a life expectancy countdown with collaborative bucket lists.
@@ -59,8 +58,6 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-
-[![Product Name Screen Shot][product-screenshot]](https://github.com/re-nanashi/mori)
 
 **Mori** is a social media application designed to help people become more mindful of how limited their time is. The app uses a life expectancy countdown to remind users that life is finite and encourages them to create meaningful experiences with the people they care about.
 
