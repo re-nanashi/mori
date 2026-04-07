@@ -54,7 +54,6 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
@@ -114,11 +113,11 @@ Make sure the following tools are installed on your machine:
 
 ### Installation
 
-1. Clone the repository
+#### 1. Clone the repository
    ```sh
    git clone https://github.com/re-nanashi/mori.git
    ```
-2. Configure Environment Variables
+#### 2. Configure Environment Variables
    ```env
    # Database Config
    POSTGRES_USER=
@@ -151,11 +150,11 @@ Make sure the following tools are installed on your machine:
    NOTIFICATION_EMAIL=
    NOTIFICATION_PASSWORD=
    ```
-3. Build the Project
+#### 3. Build the Project
    ```sh
    mvn clean install
    ```
-4. Run the application
+#### 4. Run the application
    ```sh
    mvn spring-boot:run
    ```
@@ -163,13 +162,13 @@ Make sure the following tools are installed on your machine:
    ```sh
    http://localhost:8080/api/v1
    ```
-5. Running with Docker (Optional)
-   The API will start at:
+#### 5. Running with Docker (**Optional**)
+   If using Docker for the database:
    ```sh
    docker-compose up -d
    ```
-
-6. Verify the application (Postman, cURL, frontend client)
+Then start the Spring Boot application normally.
+#### 6. Verify the application (_Postman, cURL, frontend client_)
    ```sh
    curl http://localhost:8080/actuator/health
    ```
