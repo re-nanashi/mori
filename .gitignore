@@ -4,3 +4,5 @@
 .env
 .idea
 HELP.md
+
+docs/ADR/dev-notes.md
