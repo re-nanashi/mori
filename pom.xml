@@ -28,6 +28,7 @@
     <!-- Add child modules here as you scaffold them -->
     <modules>
         <module>services/eureka-server</module>
+        <module>services/config-server</module>
     </modules>
 
     <dependencyManagement>
