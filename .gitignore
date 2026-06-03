@@ -2,7 +2,7 @@
 .vscode
 .vim
 .env
-.iml
+*.iml
 .idea
 HELP.md
 
