@@ -1,0 +1,9 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://auth.mori.app/realms/mori # change 'auth.mori.app' to actual domain
+logging:
+  level:
+    com.mori: WARN
