@@ -21,8 +21,23 @@ services:
       start_period: 30s
       timeout: 10s
 
-volumes:
-  db-data:                                               # persistent storage
+  keycloak: 
+    image: quay.io/keycloak/keycloak:24.0
+    container_name: mori-keycloak
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/mori_keycloak
+      KC_DB_USERNAME: mori
+      KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+    command: start-dev --import-realm
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    networks:
+      - mori-network
 
 networks:
   mori-network:
