@@ -1,0 +1,16 @@
+server:
+  port: 8090
+  forward-headers-strategy: framework
+
+spring:
+  application:
+    name: mori-api-gateway
+  profiles:
+    active: dev
+  config:
+    import: "configserver:"
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: mori-config-server
