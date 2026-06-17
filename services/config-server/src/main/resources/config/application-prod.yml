@@ -6,4 +6,5 @@ spring:
           issuer-uri: https://auth.mori.app/realms/mori # change 'auth.mori.app' to actual domain
 logging:
   level:
-    com.mori: WARN
+    root: WARN
+    com.mori: INFO
