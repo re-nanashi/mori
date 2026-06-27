@@ -1,0 +1,101 @@
+spring:
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            # Public Routes (IP-based)
+            - id: auth-service
+              uri: lb://MORI-AUTH-SERVICE
+              predicates:
+                - Path=/api/v1/auth/**
+              filters:
+                - RewritePath=/api/v1/auth/(?<segment>.*), /auth/${segment}
+                - name: RequestRateLimiter
+                  args:
+                    redis-rate-limiter.replenish-rate: 10
+                    redis-rate-limiter.burst-capacity: 20
+                    key-resolver: "#{@ipKeyResolver}"
+
+            # Authenticated Routes (User-based)
+            - id: user-service
+              uri: lb://MORI-USER-SERVICE
+              predicates:
+                - Path=/api/v1/users/**
+              filters:
+                - RewritePath=/api/v1/users/(?<segment>.*), /users/${segment}
+                - name: RequestRateLimiter
+                  args:
+                    redis-rate-limiter.replenish-rate: 100
+                    redis-rate-limter.burst-capacity: 200
+                    key-resolver: "#{@userKeyResolver}"
+
+            - id: post-service
+              uri: lb://MORI-POST-SERVICE
+              predicates:
+                - Path=/api/v1/posts/**
+              filters:
+                - RewritePath=/api/v1/posts/(?<segment>.*), /posts/${segment}
+                - name: RequestRateLimiter
+                  args:
+                    redis-rate-limiter.replenish-rate: 100
+                    redis-rate-limiter.burst-capacity: 200
+                    key-resolver: "#{@userKeyResolver}"
+
+            # Admin Routes (Strict)
+            - id: admin-service
+              uri: lb://MORI-USER-SERVICE
+              predicates:
+                - Path=/api/v1/admin/**
+              filters:
+                - RewritePath=/api/v1/admin/(?<segment>.*), /admin/${segment}
+                - name: RequestRateLimiter
+                  args:
+                    redis-rate-limiter.replenish-rate: 50
+                    redis-rate-limiter.burst-capacity: 100
+                    key-resolver: "#{@userKeyResolver}"
+
+            # Documentation (dev)
+            # user-service
+            - id: user-service-docs
+              uri: lb://MORI-USER-SERVICE
+              predicates:
+                - Path=/api-docs/user-service
+              filters:
+                - RewritePath=/api-docs/user-service, /v3/api-docs
+
+            # user-service
+            - id: post-service-docs
+              uri: lb://MORI-POST-SERVICE
+              predicates:
+                - Path=/api-docs/post-service
+              filters:
+                - RewritePath=/api-docs/post-service, /v3/api-docs
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    path: /api-docs/swagger-ui.html
+  urls:
+    - name: user-service
+      url: /api-docs/user-service
+    - name: post-service
+      url: /api-docs/post-service
+
+management:
+  endpoint:
+    gateway:
+      access: read-only
+  endpoints:
+    web:
+      exposure:
+        include: gateway, health, info
+
+info:
+  app:
+    name: mori-api-gateway
+    description: Mori API Gateway
+    version: 0.0.1-SNAPSHOT
+  java:
+    version: ${java.version}

@@ -41,6 +41,12 @@ services:
     networks:
       - mori-network
 
+  redis:
+    image: redis:7-alpine
+    container_name: mori-redis
+    ports: 
+      - "6379:6379"
+
 networks:
   mori-network:
     driver: bridge

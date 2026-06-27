@@ -1,6 +1,0 @@
-spring:
-  application:
-    name: user-service
-
-app:
-  test-property: "test from config server"
