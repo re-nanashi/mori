@@ -18,11 +18,13 @@ public class KeycloakRoleConverter implements Converter<Jwt, Flux<GrantedAuthori
         Map<String, Object> realmAccess = jwt.getClaimAsMap("realm_access");
 
         if (realmAccess == null || !realmAccess.containsKey("roles")) {
+            log.warn("No realm_access roles found in JWT");
             return Flux.empty();
         }
 
         List<String> realmRoles = (List<String>) realmAccess.get("roles");
-        log.info("Realm roles to map: {}", realmRoles);
+        log.debug("Realm roles extracted: {}", realmRoles);
+        log.info("Role conversion completed for {} roles", realmRoles.size());
 
         return Flux.fromIterable(realmRoles)
                 .map(roleName -> new SimpleGrantedAuthority("ROLE_" + roleName));
