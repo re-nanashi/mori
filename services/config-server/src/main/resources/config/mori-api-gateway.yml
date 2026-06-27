@@ -55,6 +55,34 @@ spring:
                     redis-rate-limiter.burst-capacity: 100
                     key-resolver: "#{@userKeyResolver}"
 
+            # Documentation (dev)
+            # user-service
+            - id: user-service-docs
+              uri: lb://MORI-USER-SERVICE
+              predicates:
+                - Path=/api-docs/user-service
+              filters:
+                - RewritePath=/api-docs/user-service, /v3/api-docs
+
+            # user-service
+            - id: post-service-docs
+              uri: lb://MORI-POST-SERVICE
+              predicates:
+                - Path=/api-docs/post-service
+              filters:
+                - RewritePath=/api-docs/post-service, /v3/api-docs
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    path: /api-docs/swagger-ui.html
+  urls:
+    - name: user-service
+      url: /api-docs/user-service
+    - name: post-service
+      url: /api-docs/post-service
+
 management:
   endpoint:
     gateway:

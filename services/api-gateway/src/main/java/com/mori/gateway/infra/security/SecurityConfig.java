@@ -25,9 +25,7 @@ public class SecurityConfig {
                         .pathMatchers("/actuator/**").hasAuthority("ROLE_ADMIN")
 
                         // API Docs; public in dev
-                        .pathMatchers("/swagger-ui/**").permitAll()
-                        .pathMatchers("/swagger-ui.html").permitAll()
-                        .pathMatchers("/v3/api-docs/**").permitAll()
+                        .pathMatchers("/api-docs/**").permitAll()
                         .pathMatchers("/webjars/**").permitAll()
 
                         // Auth — public

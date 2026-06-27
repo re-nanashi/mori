@@ -4,3 +4,9 @@ spring:
 
 app:
   test-property: "test from config server"
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: false
