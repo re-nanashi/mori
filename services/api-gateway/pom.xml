@@ -13,7 +13,7 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>mori-api-gateway</artifactId>
+    <artifactId>api-gateway</artifactId>
     <name>api-gateway</name>
     <description>API Gateway</description>
 

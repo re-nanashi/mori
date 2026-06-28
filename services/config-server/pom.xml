@@ -13,7 +13,7 @@
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>mori-config-server</artifactId>
+	<artifactId>config-server</artifactId>
 	<name>config-server</name>
 	<description>Configuration server</description>
 

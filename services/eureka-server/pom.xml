@@ -13,7 +13,7 @@
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>mori-eureka-server</artifactId>
+	<artifactId>eureka-server</artifactId>
 	<name>eureka-server</name>
 	<description>Service discovery server</description>
 
