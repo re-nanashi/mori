@@ -38,6 +38,14 @@ public class ApiResponse<T> {
                 .build();
     }
 
+    public static <T> ApiResponse<T> created(T data, String message) {
+        return ApiResponse.<T>builder()
+                .success(true)
+                .message(message)
+                .data(data)
+                .build();
+    }
+
     public static <T> ApiResponse<T> paged(T data, PageMeta page) {
         return ApiResponse.<T>builder()
                 .success(true)
