@@ -26,6 +26,7 @@
 
     <!-- Add child modules here as you scaffold them -->
     <modules>
+        <module>shared/common</module>
         <module>services/eureka-server</module>
         <module>services/config-server</module>
         <module>services/api-gateway</module>
