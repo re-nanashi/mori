@@ -1,4 +1,4 @@
-package com.mori.gateway.infra.security;
+package com.mori.gateway.config;
 
 import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
 import org.springframework.context.annotation.Bean;
@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono;
 import java.security.Principal;
 
 @Configuration
-public class RateLimiterConfig {
+public class KeyResolverConfig2 {
     @Primary
     @Bean
     public KeyResolver userKeyResolver() {

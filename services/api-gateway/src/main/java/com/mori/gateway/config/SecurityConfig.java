@@ -3,6 +3,7 @@ package com.mori.gateway.infra.security;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
@@ -29,9 +30,11 @@ public class SecurityConfig {
                         .pathMatchers("/webjars/**").permitAll()
 
                         // Auth — public
-                        .pathMatchers("/api/v1/auth/**").permitAll()
+                        .pathMatchers("/api/v1/auth/register").permitAll()
+                        .pathMatchers("/api/v1/auth/login").permitAll()
 
                         // Protected
+                        .pathMatchers("/api/v1/auth/**").hasAuthority("ROLE_USER")
                         .pathMatchers("/api/v1/admin/**").hasAuthority("ROLE_ADMIN")
                         .pathMatchers("/api/v1/**").hasAuthority("ROLE_USER")
                         .anyExchange().authenticated()
