@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono;
 import java.security.Principal;
 
 @Configuration
-public class KeyResolverConfig2 {
+public class KeyResolverConfig {
     @Primary
     @Bean
     public KeyResolver userKeyResolver() {
