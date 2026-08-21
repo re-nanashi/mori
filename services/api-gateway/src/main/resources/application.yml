@@ -5,6 +5,8 @@ server:
 spring:
   application:
     name: mori-api-gateway
+  main:
+    web-application-type: reactive
   profiles:
     active: dev
   config:
