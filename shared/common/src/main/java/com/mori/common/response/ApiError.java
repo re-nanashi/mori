@@ -1,10 +1,11 @@
 package com.mori.common.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.mori.common.error.ErrorCode;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.http.HttpStatus;
 
 import java.time.Instant;
 import java.util.List;
@@ -12,20 +13,31 @@ import java.util.List;
 @Data
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({
+        "status",
+        "error_code",
+        "message",
+        "path",
+        "timestamp",
+        "details",
+        "trace_id"
+})
 public class ApiError {
+    private int status;
+    @JsonProperty("error_code")
     private String errorCode;
     private String message;
-    private int status;
     private String path;
     private Instant timestamp;
     private List<String> details;
+    @JsonProperty("trace_id")
     private String traceId;
 
     public static ApiError of(ErrorCode errorCode, String path) {
         return ApiError.builder()
+                .status(errorCode.getStatus().value())
                 .errorCode(errorCode.getCode())
                 .message(errorCode.getDefaultMessage())
-                .status(errorCode.getStatus().value())
                 .path(path)
                 .timestamp(Instant.now())
                 .build();
@@ -33,19 +45,19 @@ public class ApiError {
 
     public static ApiError of(ErrorCode errorCode, String message, String path) {
         return ApiError.builder()
+                .status(errorCode.getStatus().value())
                 .errorCode(errorCode.getCode())
                 .message(message)
-                .status(errorCode.getStatus().value())
                 .path(path)
                 .timestamp(Instant.now())
                 .build();
     }
 
-    public static ApiError of (ErrorCode errorCode, String message, String path, List<String> details) {
+    public static ApiError of(ErrorCode errorCode, String message, String path, List<String> details) {
         return ApiError.builder()
+                .status(errorCode.getStatus().value())
                 .errorCode(errorCode.getCode())
                 .message(message)
-                .status(errorCode.getStatus().value())
                 .path(path)
                 .timestamp(Instant.now())
                 .details(details)
@@ -54,9 +66,9 @@ public class ApiError {
 
     public static ApiError validation(String path, List<String> details) {
         return ApiError.builder()
+                .status(ErrorCode.VALIDATION_ERROR.getStatus().value())
                 .errorCode(ErrorCode.VALIDATION_ERROR.getCode())
                 .message("Validation failed")
-                .status(HttpStatus.BAD_REQUEST.value())
                 .path(path)
                 .timestamp(Instant.now())
                 .details(details)
@@ -65,9 +77,9 @@ public class ApiError {
 
     public static ApiError internal(String path) {
         return ApiError.builder()
+                .status(ErrorCode.INTERNAL_ERROR.getStatus().value())
                 .errorCode(ErrorCode.INTERNAL_ERROR.getCode())
                 .message("An unexpected error occurred")
-                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .path(path)
                 .timestamp(Instant.now())
                 .build();
