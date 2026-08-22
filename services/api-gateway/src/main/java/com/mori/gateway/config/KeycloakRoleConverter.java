@@ -1,4 +1,4 @@
-package com.mori.gateway.infra.security;
+package com.mori.gateway.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;

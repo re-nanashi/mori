@@ -1,9 +1,10 @@
-package com.mori.gateway.infra.security;
+package com.mori.gateway.config;
 
+import com.mori.gateway.exception.GatewayAccessDeniedHandler;
+import com.mori.gateway.exception.GatewayAuthenticationEntryPoint;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
@@ -17,31 +18,40 @@ import org.springframework.security.web.server.context.NoOpServerSecurityContext
 @Slf4j
 public class SecurityConfig {
     @Bean
-    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
+    public SecurityWebFilterChain securityWebFilterChain(
+            ServerHttpSecurity http,
+            GatewayAuthenticationEntryPoint authenticationEntryPoint,
+            GatewayAccessDeniedHandler accessDeniedHandler,
+    ) {
+
         return http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
-                .authorizeExchange(auth -> auth
-                        // Actuator
-                        .pathMatchers("/actuator/health").permitAll()
-                        .pathMatchers("/actuator/**").hasAuthority("ROLE_ADMIN")
+                .authorizeExchange(auth -> {
+                    auth
+                            // Actuator
+                            .pathMatchers("/actuator/health").permitAll()
+                            .pathMatchers("/actuator/**").hasAuthority("ROLE_ADMIN")
 
-                        // API Docs; public in dev
-                        .pathMatchers("/api-docs/**").permitAll()
-                        .pathMatchers("/webjars/**").permitAll()
+                            // Auth
+                            .pathMatchers("/api/v1/auth/register").permitAll()
+                            .pathMatchers("/api/v1/auth/login").permitAll()
+                            .pathMatchers("/api/v1/auth/refresh").permitAll()
 
-                        // Auth — public
-                        .pathMatchers("/api/v1/auth/register").permitAll()
-                        .pathMatchers("/api/v1/auth/login").permitAll()
-
-                        // Protected
-                        .pathMatchers("/api/v1/auth/**").hasAuthority("ROLE_USER")
-                        .pathMatchers("/api/v1/admin/**").hasAuthority("ROLE_ADMIN")
-                        .pathMatchers("/api/v1/**").hasAuthority("ROLE_USER")
-                        .anyExchange().authenticated()
+                            // Protected
+                            .pathMatchers("/api/v1/admin/**").hasAuthority("ROLE_ADMIN")
+                            .pathMatchers("/api/v1/**").hasAuthority("ROLE_USER")
+                            .anyExchange().authenticated();
+                        }
+                )
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(authenticationEntryPoint)
+                        .accessDeniedHandler(accessDeniedHandler)
                 )
                 .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtConverter()))
+                        .authenticationEntryPoint(authenticationEntryPoint)
+                        .accessDeniedHandler(accessDeniedHandler)
                 )
                 .build();
     }
