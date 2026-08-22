@@ -42,7 +42,7 @@ public enum ErrorCode {
             "Invalid email or password"),
     AUTH_EMAIL_EXISTS("AUTH_EMAIL_EXISTS", HttpStatus.CONFLICT,
             "Email already in use"),
-    AUTH_INVALID_TOKEN("AUTH_INVALID_TOKEN", HttpStatus.UNAUTHORIZED,
+    AUTH_INVALID_TOKEN("AUTH_INVALID_TOKEN", HttpStatus.BAD_REQUEST,
             "Invalid or expired token"),
     AUTH_KEYCLOAK_UNAVAILABLE("AUTH_KEYCLOAK_UNAVAILABLE", HttpStatus.SERVICE_UNAVAILABLE,
             "Authentication service unavailable"),
