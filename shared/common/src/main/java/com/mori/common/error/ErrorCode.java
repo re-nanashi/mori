@@ -32,8 +32,8 @@ public enum ErrorCode {
             "HTTP method not supported for this endpoint"),
     UNSUPPORTED_MEDIA_TYPE("UNSUPPORTED_MEDIA_TYPE", HttpStatus.UNSUPPORTED_MEDIA_TYPE,
             "Media type not supported"),
-    MALFORMED_REQUEST("MALFORMED_REQUEST", HttpStatus.BAD_REQUEST,
-            "Request body is malformed or missing"),
+    INVALID_REQUEST("INVALID_REQUEST", HttpStatus.BAD_REQUEST,
+            "Malformed or missing request parameters"),
     RATE_LIMIT_EXCEEDED("RATE_LIMIT_EXCEEDED", HttpStatus.TOO_MANY_REQUESTS,
             "Too many requests"),
 
