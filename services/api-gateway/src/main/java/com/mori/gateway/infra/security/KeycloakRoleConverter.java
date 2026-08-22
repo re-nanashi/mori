@@ -23,6 +23,7 @@ public class KeycloakRoleConverter implements Converter<Jwt, Flux<GrantedAuthori
         }
 
         List<String> realmRoles = (List<String>) realmAccess.get("roles");
+        
         log.debug("Realm roles extracted: {}", realmRoles);
         log.info("Role conversion completed for {} roles", realmRoles.size());
 
