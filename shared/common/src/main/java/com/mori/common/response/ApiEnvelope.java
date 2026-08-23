@@ -15,7 +15,7 @@ import lombok.Data;
         "error",
         "page"
 })
-public class ApiResponse<T> {
+public class ApiEnvelope<T> {
     private boolean success;
     private String message;
     private T data;
@@ -23,39 +23,39 @@ public class ApiResponse<T> {
     private PageMeta page;
 
     // Success factories
-    public static <T> ApiResponse<T> ok(T data) {
-        return ApiResponse.<T>builder()
+    public static <T> ApiEnvelope<T> ok(T data) {
+        return ApiEnvelope.<T>builder()
                 .success(true)
                 .data(data)
                 .build();
     }
 
-    public static <T> ApiResponse<T> ok(T data, String message) {
-        return ApiResponse.<T>builder()
+    public static <T> ApiEnvelope<T> ok(T data, String message) {
+        return ApiEnvelope.<T>builder()
                 .success(true)
                 .message(message)
                 .data(data)
                 .build();
     }
 
-    public static <T> ApiResponse<T> created(T data) {
-        return ApiResponse.<T>builder()
+    public static <T> ApiEnvelope<T> created(T data) {
+        return ApiEnvelope.<T>builder()
                 .success(true)
                 .message("Resource created successfully")
                 .data(data)
                 .build();
     }
 
-    public static <T> ApiResponse<T> created(T data, String message) {
-        return ApiResponse.<T>builder()
+    public static <T> ApiEnvelope<T> created(T data, String message) {
+        return ApiEnvelope.<T>builder()
                 .success(true)
                 .message(message)
                 .data(data)
                 .build();
     }
 
-    public static <T> ApiResponse<T> paged(T data, PageMeta page) {
-        return ApiResponse.<T>builder()
+    public static <T> ApiEnvelope<T> paged(T data, PageMeta page) {
+        return ApiEnvelope.<T>builder()
                 .success(true)
                 .data(data)
                 .page(page)
@@ -63,8 +63,8 @@ public class ApiResponse<T> {
     }
 
     // Error factory
-    public static <T> ApiResponse<T> error(ApiError error) {
-        return ApiResponse.<T>builder()
+    public static <T> ApiEnvelope<T> error(ApiError error) {
+        return ApiEnvelope.<T>builder()
                 .success(false)
                 .error(error)
                 .build();

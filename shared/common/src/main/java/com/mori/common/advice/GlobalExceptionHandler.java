@@ -4,7 +4,7 @@ import com.mori.common.error.ErrorCode;
 import com.mori.common.exception.BaseException;
 import com.mori.common.exception.RateLimitExceededException;
 import com.mori.common.response.ApiError;
-import com.mori.common.response.ApiResponse;
+import com.mori.common.response.ApiEnvelope;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -28,18 +28,18 @@ import java.util.Optional;
 public class GlobalExceptionHandler {
     // Handle business exceptions (4xx)
     @ExceptionHandler(BaseException.class)
-    public ResponseEntity<ApiResponse<Void>> handleBase(BaseException ex, HttpServletRequest request) {
+    public ResponseEntity<ApiEnvelope<Void>> handleBase(BaseException ex, HttpServletRequest request) {
         log.warn("Business exception [{}]: {}", ex.getErrorCode().getCode(), ex.getMessage());
 
         ApiError error = ApiError.of(ex.getErrorCode(), ex.getMessage(), resolvePath(request));
 
         return ResponseEntity.status(ex.getErrorCode().getStatus())
-                .body(ApiResponse.error(error));
+                .body(ApiEnvelope.error(error));
     }
 
     // Handle validation exception (400)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiResponse<Void>> handleValidation(MethodArgumentNotValidException ex, HttpServletRequest request) {
+    public ResponseEntity<ApiEnvelope<Void>> handleValidation(MethodArgumentNotValidException ex, HttpServletRequest request) {
         String path = resolvePath(request);
 
         List<String> details = ex.getBindingResult()
@@ -53,12 +53,12 @@ public class GlobalExceptionHandler {
         ApiError error = ApiError.validation(path, details);
 
         return ResponseEntity.badRequest()
-                .body(ApiResponse.error(error));
+                .body(ApiEnvelope.error(error));
     }
 
     // Handle non-existent routes (404)
     @ExceptionHandler(NoResourceFoundException.class)
-    public ResponseEntity<ApiResponse<Void>> handleNoResourceFound(NoResourceFoundException ex, HttpServletRequest request) {
+    public ResponseEntity<ApiEnvelope<Void>> handleNoResourceFound(NoResourceFoundException ex, HttpServletRequest request) {
         String path = resolvePath(request);
 
         log.debug("Route not found: {}", path);
@@ -70,12 +70,12 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.status(ErrorCode.ROUTE_NOT_FOUND.getStatus())
-                .body(ApiResponse.error(error));
+                .body(ApiEnvelope.error(error));
     }
 
     // Handle HTTP method not allowed (405)
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<ApiResponse<Void>> handleMethodNotAllowed(HttpRequestMethodNotSupportedException ex, HttpServletRequest request) {
+    public ResponseEntity<ApiEnvelope<Void>> handleMethodNotAllowed(HttpRequestMethodNotSupportedException ex, HttpServletRequest request) {
         String path = resolvePath(request);
 
         log.debug("Method not allowed: {} {}", ex.getMethod(), path);
@@ -87,12 +87,12 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.status(ErrorCode.METHOD_NOT_ALLOWED.getStatus())
-                .body(ApiResponse.error(error));
+                .body(ApiEnvelope.error(error));
     }
 
     // Handle unsupported media types (415)
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
-    public ResponseEntity<ApiResponse<Void>> handleUnsupportedMediaType(HttpMediaTypeNotSupportedException ex, HttpServletRequest request) {
+    public ResponseEntity<ApiEnvelope<Void>> handleUnsupportedMediaType(HttpMediaTypeNotSupportedException ex, HttpServletRequest request) {
         log.debug("Unsupported media type: {}", ex.getContentType());
 
         ApiError error = ApiError.of(
@@ -102,12 +102,12 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.status(ErrorCode.UNSUPPORTED_MEDIA_TYPE.getStatus())
-                .body(ApiResponse.error(error));
+                .body(ApiEnvelope.error(error));
     }
 
     // Handle invalid or malformed request (400)
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ApiResponse<Void>> handleMessageNotReadable(HttpMessageNotReadableException ex, HttpServletRequest request) {
+    public ResponseEntity<ApiEnvelope<Void>> handleMessageNotReadable(HttpMessageNotReadableException ex, HttpServletRequest request) {
         String path = resolvePath(request);
 
         log.debug("Malformed request body at {}", path);
@@ -119,12 +119,12 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.badRequest()
-                .body(ApiResponse.error(error));
+                .body(ApiEnvelope.error(error));
     }
 
     // Handle missing or wrong type path/query params (400)
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<ApiResponse<Void>> handleTypeMismatch(MethodArgumentTypeMismatchException ex, HttpServletRequest request) {
+    public ResponseEntity<ApiEnvelope<Void>> handleTypeMismatch(MethodArgumentTypeMismatchException ex, HttpServletRequest request) {
         log.debug("Type mismatch for param '{}': {}", ex.getName(), ex.getValue());
 
         ApiError error = ApiError.of(
@@ -134,12 +134,12 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.badRequest()
-                .body(ApiResponse.error(error));
+                .body(ApiEnvelope.error(error));
     }
 
     // Handle too many requests (429)
     @ExceptionHandler(RateLimitExceededException.class)
-    public ResponseEntity<ApiResponse<Void>> handleRateLimit(RateLimitExceededException ex, HttpServletRequest request) {
+    public ResponseEntity<ApiEnvelope<Void>> handleRateLimit(RateLimitExceededException ex, HttpServletRequest request) {
         String path = resolvePath(request);
 
         // TODO: include clientId and IpAddress
@@ -153,12 +153,12 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.status(ErrorCode.RATE_LIMIT_EXCEEDED.getStatus())
-                .body(ApiResponse.error(error));
+                .body(ApiEnvelope.error(error));
     }
 
     // Handle missing cookie exception (400)
     @ExceptionHandler(MissingRequestCookieException.class)
-    public ResponseEntity<ApiResponse<Void>> handleMissingCookie(MissingRequestCookieException ex, HttpServletRequest request) {
+    public ResponseEntity<ApiEnvelope<Void>> handleMissingCookie(MissingRequestCookieException ex, HttpServletRequest request) {
         String path = resolvePath(request);
 
         String message = "refresh_token".equals(ex.getCookieName()) ?
@@ -174,12 +174,12 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.badRequest()
-                .body(ApiResponse.error(error));
+                .body(ApiEnvelope.error(error));
     }
 
     // Fallback for all uncaught exceptions (500)
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<Void>> handleGeneric(Exception ex, HttpServletRequest request) {
+    public ResponseEntity<ApiEnvelope<Void>> handleGeneric(Exception ex, HttpServletRequest request) {
         String path = resolvePath(request);
 
         log.error("Unhandled exception [{} {}]: {}", request.getMethod(), path, ex.getMessage(), ex);
@@ -187,7 +187,7 @@ public class GlobalExceptionHandler {
         ApiError error = ApiError.internal(path);
 
         return ResponseEntity.internalServerError()
-                .body(ApiResponse.error(error));
+                .body(ApiEnvelope.error(error));
     }
 
     // Helper method that resolves the original request path. The API gateway includes the original path

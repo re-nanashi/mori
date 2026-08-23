@@ -3,7 +3,7 @@ package com.mori.gateway.exception;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mori.common.response.ApiError;
-import com.mori.common.response.ApiResponse;
+import com.mori.common.response.ApiEnvelope;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -27,7 +27,7 @@ public class GatewayErrorResponseWriter {
         response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
 
         try {
-            byte[] bytes = objectMapper.writeValueAsBytes(ApiResponse.error(apiError));
+            byte[] bytes = objectMapper.writeValueAsBytes(ApiEnvelope.error(apiError));
             DataBuffer buffer = response.bufferFactory().wrap(bytes);
             return response.writeWith(Mono.just(buffer));
         } catch (JsonProcessingException ex) {
