@@ -1,7 +1,7 @@
 package com.mori.gateway.exception;
 
-import com.mori.common.error.ErrorCode;
-import com.mori.common.response.ApiError;
+import com.mori.shared.core.error.ErrorCode;
+import com.mori.shared.core.response.ApiError;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NonNull;

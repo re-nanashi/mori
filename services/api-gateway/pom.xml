@@ -70,7 +70,7 @@
         <!-- Mori common library -->
         <dependency>
             <groupId>com.mori</groupId>
-            <artifactId>mori-common</artifactId>
+            <artifactId>shared-core</artifactId>
             <version>${project.version}</version>
         </dependency>
 

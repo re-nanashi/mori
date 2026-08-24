@@ -26,11 +26,16 @@
 
     <!-- Add child modules here as you scaffold them -->
     <modules>
-        <module>shared/common</module>
+        <!-- Shared Libraries -->
+        <module>shared/shared-core</module>
+        <module>shared/shared-web-mvc</module>
+
+        <!-- Infra Services -->
         <module>services/eureka-server</module>
         <module>services/config-server</module>
         <module>services/api-gateway</module>
-        <module>services/auth-service</module>
+
+        <!-- Business Services -->
     </modules>
 
     <dependencyManagement>

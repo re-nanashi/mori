@@ -2,8 +2,8 @@ package com.mori.gateway.exception;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mori.common.response.ApiError;
-import com.mori.common.response.ApiEnvelope;
+import com.mori.shared.core.response.ApiError;
+import com.mori.shared.core.response.ApiEnvelope;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.buffer.DataBuffer;
