@@ -1,1 +1,2 @@
 com.mori.shared.webmvc.advice.GlobalExceptionHandler
+com.mori.shared.webmvc.security.WebMvcSecurityBeans
