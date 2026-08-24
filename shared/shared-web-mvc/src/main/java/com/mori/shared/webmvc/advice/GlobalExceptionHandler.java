@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -34,6 +35,19 @@ public class GlobalExceptionHandler {
         ApiError error = ApiError.of(ex.getErrorCode(), ex.getMessage(), resolvePath(request));
 
         return ResponseEntity.status(ex.getErrorCode().getStatus())
+                .body(ApiEnvelope.error(error));
+    }
+
+    // Handle unauthorized exceptions (403)
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public ResponseEntity<ApiEnvelope<Void>> handleAuthorizationDenied(AuthorizationDeniedException ex, HttpServletRequest request) {
+        String path = resolvePath(request);
+
+        log.warn("Access denied [{} {}]: {}", request.getMethod(), path, ex.getMessage());
+
+        ApiError error = ApiError.of(ErrorCode.FORBIDDEN, ErrorCode.FORBIDDEN.getDefaultMessage(), path);
+
+        return ResponseEntity.status(ErrorCode.FORBIDDEN.getStatus())
                 .body(ApiEnvelope.error(error));
     }
 
