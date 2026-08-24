@@ -28,7 +28,7 @@ public class GlobalLoggingFilter implements GlobalFilter, Ordered {
                 .build();
 
         // pre-filter execution (before passing to microservices)
-        log.info("[GATEWAY] Request: {} {}", method, originalPath);
+        log.info("[API-GATEWAY] Request: {} {}", method, originalPath);
 
         // calling the next filter in the chain
         return chain.filter(exchange.mutate().request(mutatedRequest).build())
@@ -36,7 +36,7 @@ public class GlobalLoggingFilter implements GlobalFilter, Ordered {
                     long duration = System.currentTimeMillis() - startTime;
 
                     // post-filter execution (after receiving response from microservices)
-                    log.info("[GATEWAY] Response: {} {} {}ms",
+                    log.info("[API-GATEWAY] Response: {} {} {}ms",
                             exchange.getResponse().getStatusCode(),
                             exchange.getRequest().getPath(),
                             duration
