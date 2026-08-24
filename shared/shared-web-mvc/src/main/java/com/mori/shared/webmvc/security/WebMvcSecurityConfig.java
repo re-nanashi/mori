@@ -37,8 +37,6 @@ public class WebMvcSecurityConfig {
                         .accessDeniedHandler(apiAccessDeniedHandler)
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
-                        .authenticationEntryPoint(apiAuthEntryPoint)
-                        .accessDeniedHandler(apiAccessDeniedHandler)
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter))
                 )
                 .build();
