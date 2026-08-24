@@ -26,6 +26,8 @@ public class TrailingSlashHandlerFilter implements WebFilter {
                     .path(newPath)
                     .build();
 
+            exchange.getAttributes().put(MoriExchangeAttributes.REWRITTEN_PATH_NO_TRAILING_SLASH, newPath);
+
             return chain.filter(exchange.mutate()
                     .request(mutatedRequest)
                     .build()

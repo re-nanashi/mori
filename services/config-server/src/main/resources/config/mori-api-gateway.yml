@@ -8,9 +8,9 @@ spring:
             - id: auth-service
               uri: lb://MORI-AUTH-SERVICE
               predicates:
-                - Path=/api/v1/auth/**
+                - Path=/api/v1/auth, /api/v1/auth/**
               filters:
-                - RewritePath=/api/v1/auth/(?<segment>.*), /auth/${segment}
+                - RewritePath=/api/v1/auth(?<segment>.*), /auth$\{segment}
                 - name: RequestRateLimiter
                   args:
                     redis-rate-limiter.replenish-rate: 10
@@ -21,21 +21,21 @@ spring:
             - id: user-service
               uri: lb://MORI-USER-SERVICE
               predicates:
-                - Path=/api/v1/users/**
+                - Path=/api/v1/users, /api/v1/users/**
               filters:
-                - RewritePath=/api/v1/users/(?<segment>.*), /users/${segment}
+                - RewritePath=/api/v1/users(?<segment>.*), /users$\{segment}
                 - name: RequestRateLimiter
                   args:
                     redis-rate-limiter.replenish-rate: 100
-                    redis-rate-limter.burst-capacity: 200
+                    redis-rate-limiter.burst-capacity: 200
                     key-resolver: "#{@userKeyResolver}"
 
             - id: post-service
               uri: lb://MORI-POST-SERVICE
               predicates:
-                - Path=/api/v1/posts/**
+                - Path=/api/v1/posts, /api/v1/posts/**
               filters:
-                - RewritePath=/api/v1/posts/(?<segment>.*), /posts/${segment}
+                - RewritePath=/api/v1/posts(?<segment>.*), /posts$\{segment}
                 - name: RequestRateLimiter
                   args:
                     redis-rate-limiter.replenish-rate: 100
@@ -46,9 +46,9 @@ spring:
             - id: admin-service
               uri: lb://MORI-USER-SERVICE
               predicates:
-                - Path=/api/v1/admin/**
+                - Path=/api/v1/admin, /api/v1/admin/**
               filters:
-                - RewritePath=/api/v1/admin/(?<segment>.*), /admin/${segment}
+                - RewritePath=/api/v1/admin(?<segment>.*), /admin$\{segment}
                 - name: RequestRateLimiter
                   args:
                     redis-rate-limiter.replenish-rate: 50
@@ -87,10 +87,12 @@ management:
   endpoint:
     gateway:
       access: read-only
+    env:
+      show-values: always
   endpoints:
     web:
       exposure:
-        include: gateway, health, info
+        include: env,gateway,health,info,configprops
 
 info:
   app:

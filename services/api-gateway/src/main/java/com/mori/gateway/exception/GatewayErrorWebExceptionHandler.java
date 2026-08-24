@@ -1,5 +1,6 @@
 package com.mori.gateway.exception;
 
+import com.mori.gateway.filter.MoriExchangeAttributes;
 import com.mori.shared.core.error.ErrorCode;
 import com.mori.shared.core.response.ApiError;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,12 @@ public class GatewayErrorWebExceptionHandler implements ErrorWebExceptionHandler
 
     @Override
     public @NonNull Mono<Void> handle(ServerWebExchange exchange, @NonNull Throwable ex) {
-        String path = exchange.getRequest().getPath().toString();
+        // originalPath does not reflect the path mutation performed by TrailingSlashHandlerFilter,
+        // so the filter stores the rewritten path as an exchange attribute for us to retrieve here.
+        String originalPath = exchange.getRequest().getPath().toString();
+        String normalizedPath = exchange.getAttributes()
+                .getOrDefault(MoriExchangeAttributes.REWRITTEN_PATH_NO_TRAILING_SLASH, originalPath)
+                .toString();
         String method = exchange.getRequest().getMethod().toString();
 
         if (ex instanceof ResponseStatusException rse) {
@@ -31,17 +37,19 @@ public class GatewayErrorWebExceptionHandler implements ErrorWebExceptionHandler
             String message = errorCode.getDefaultMessage();
 
             log.warn("Gateway error [{} {}]: {}",
-                    method, path, rse.getReason());
+                    method, normalizedPath, rse.getReason());
 
-            ApiError apiError = ApiError.of(errorCode, message, path);
-            return errorResponseWriter.write(exchange, apiError);
+            ApiError error = ApiError.of(errorCode, message, normalizedPath);
+
+            return errorResponseWriter.write(exchange, error);
         }
 
         log.error("Unhandled gateway exception [{} {}]: {}",
-                method, path, ex.getMessage(), ex);
+                method, originalPath, ex.getMessage(), ex);
 
-        ApiError apiError = ApiError.internal(path);
-        return errorResponseWriter.write(exchange, apiError);
+        ApiError error = ApiError.internal(normalizedPath);
+
+        return errorResponseWriter.write(exchange, error);
     }
 
     private ErrorCode resolveErrorCode(HttpStatus status) {
