@@ -56,6 +56,14 @@ spring:
                     key-resolver: "#{@userKeyResolver}"
 
             # Documentation (dev)
+            # auth-service
+            - id: auth-service-docs
+              uri: lb://MORI-AUTH-SERVICE
+              predicates:
+                - Path=/api-docs/auth-service
+              filters:
+                - RewritePath=/api-docs/auth-service, /v3/api-docs
+
             # user-service
             - id: user-service-docs
               uri: lb://MORI-USER-SERVICE
@@ -64,7 +72,7 @@ spring:
               filters:
                 - RewritePath=/api-docs/user-service, /v3/api-docs
 
-            # user-service
+            # post-service
             - id: post-service-docs
               uri: lb://MORI-POST-SERVICE
               predicates:
@@ -73,15 +81,15 @@ spring:
                 - RewritePath=/api-docs/post-service, /v3/api-docs
 
 springdoc:
-  api-docs:
-    enabled: false
   swagger-ui:
     path: /api-docs/swagger-ui.html
-  urls:
-    - name: user-service
-      url: /api-docs/user-service
-    - name: post-service
-      url: /api-docs/post-service
+    urls:
+      - name: Auth Service
+        url: /api-docs/auth-service
+      - name: User Service
+        url: /api-docs/user-service
+      - name: Post Service
+        url: /api-docs/post-service
 
 management:
   endpoint:
