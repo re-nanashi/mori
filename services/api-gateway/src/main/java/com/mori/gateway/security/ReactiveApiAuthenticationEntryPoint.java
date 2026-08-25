@@ -1,4 +1,4 @@
-package com.mori.gateway.exception;
+package com.mori.gateway.security;
 
 import com.mori.shared.core.error.ErrorCode;
 import com.mori.shared.core.response.ApiError;
@@ -14,8 +14,8 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class GatewayAuthenticationEntryPoint implements ServerAuthenticationEntryPoint {
-    private final GatewayErrorResponseWriter errorResponseWriter;
+public class ReactiveApiAuthenticationEntryPoint implements ServerAuthenticationEntryPoint {
+    private final ReactiveErrorResponseWriter errorResponseWriter;
 
     @Override
     public @NonNull Mono<Void> commence(ServerWebExchange exchange, AuthenticationException ex) {

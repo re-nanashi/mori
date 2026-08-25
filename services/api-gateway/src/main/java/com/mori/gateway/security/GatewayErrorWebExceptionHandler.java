@@ -1,4 +1,4 @@
-package com.mori.gateway.exception;
+package com.mori.gateway.security;
 
 import com.mori.gateway.filter.MoriExchangeAttributes;
 import com.mori.shared.core.error.ErrorCode;
@@ -19,7 +19,7 @@ import reactor.core.publisher.Mono;
 @Order(-2)
 @RequiredArgsConstructor
 public class GatewayErrorWebExceptionHandler implements ErrorWebExceptionHandler {
-    private final GatewayErrorResponseWriter errorResponseWriter;
+    private final ReactiveErrorResponseWriter errorResponseWriter;
 
     @Override
     public @NonNull Mono<Void> handle(ServerWebExchange exchange, @NonNull Throwable ex) {

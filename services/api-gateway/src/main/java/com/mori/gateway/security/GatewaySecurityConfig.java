@@ -1,7 +1,5 @@
-package com.mori.gateway.config;
+package com.mori.gateway.security;
 
-import com.mori.gateway.exception.GatewayAccessDeniedHandler;
-import com.mori.gateway.exception.GatewayAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,9 +24,9 @@ public class GatewaySecurityConfig {
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(
             ServerHttpSecurity http,
-            GatewayAuthenticationEntryPoint authEntryPoint,
-            GatewayAccessDeniedHandler accessDeniedHandler,
-            KeycloakReactiveJwtAuthenticationConverter reactiveJwtAuthConverter
+            ReactiveApiAuthenticationEntryPoint reactiveAuthEntryPoint,
+            ReactiveApiAccessDeniedHandler reactiveAccessDeniedHandler,
+            ReactiveKeycloakJwtAuthenticationConverter reactiveJwtAuthConverter
     ) {
         return http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
@@ -39,13 +37,13 @@ public class GatewaySecurityConfig {
                         .anyExchange().authenticated()
                 )
                 .exceptionHandling(ex -> ex
-                        .authenticationEntryPoint(authEntryPoint)
-                        .accessDeniedHandler(accessDeniedHandler)
+                        .authenticationEntryPoint(reactiveAuthEntryPoint)
+                        .accessDeniedHandler(reactiveAccessDeniedHandler)
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(reactiveJwtAuthConverter))
-                        .authenticationEntryPoint(authEntryPoint)
-                        .accessDeniedHandler(accessDeniedHandler)
+                        .authenticationEntryPoint(reactiveAuthEntryPoint)
+                        .accessDeniedHandler(reactiveAccessDeniedHandler)
                 )
                 .build();
     }

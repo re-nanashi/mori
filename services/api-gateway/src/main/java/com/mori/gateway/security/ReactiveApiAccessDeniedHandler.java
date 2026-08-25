@@ -1,4 +1,4 @@
-package com.mori.gateway.exception;
+package com.mori.gateway.security;
 
 import com.mori.shared.core.error.ErrorCode;
 import com.mori.shared.core.response.ApiError;
@@ -14,8 +14,8 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class GatewayAccessDeniedHandler implements ServerAccessDeniedHandler {
-    private final GatewayErrorResponseWriter errorResponseWriter;
+public class ReactiveApiAccessDeniedHandler implements ServerAccessDeniedHandler {
+    private final ReactiveErrorResponseWriter errorResponseWriter;
 
     @Override
     public @NonNull Mono<Void> handle(ServerWebExchange exchange, AccessDeniedException ex) {

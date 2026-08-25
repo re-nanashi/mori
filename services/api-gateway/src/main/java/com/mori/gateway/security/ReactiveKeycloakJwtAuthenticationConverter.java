@@ -1,4 +1,4 @@
-package com.mori.gateway.config;
+package com.mori.gateway.security;
 
 import com.mori.shared.core.security.KeycloakAuthorities;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,7 @@ import java.util.*;
 
 @Slf4j
 @Component
-public class KeycloakReactiveJwtAuthenticationConverter implements Converter<Jwt, Mono<AbstractAuthenticationToken>> {
+public class ReactiveKeycloakJwtAuthenticationConverter implements Converter<Jwt, Mono<AbstractAuthenticationToken>> {
     @Override
     public Mono<AbstractAuthenticationToken> convert(Jwt jwt) {
         Collection<GrantedAuthority> authorities = KeycloakAuthorities.from(jwt);

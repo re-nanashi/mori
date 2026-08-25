@@ -1,4 +1,4 @@
-package com.mori.gateway.exception;
+package com.mori.gateway.security;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,7 +17,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class GatewayErrorResponseWriter {
+public class ReactiveErrorResponseWriter {
     private final ObjectMapper objectMapper;
 
     public Mono<Void> write(ServerWebExchange exchange, ApiError error) {
