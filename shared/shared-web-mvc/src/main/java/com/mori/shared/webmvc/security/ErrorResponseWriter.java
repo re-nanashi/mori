@@ -16,13 +16,13 @@ import java.nio.charset.StandardCharsets;
 public class ErrorResponseWriter {
     private final ObjectMapper objectMapper;
 
-    public void write(HttpServletResponse response, ApiError apiError) {
-        response.setStatus(apiError.getStatus());
+    public void write(HttpServletResponse response, ApiError error) {
+        response.setStatus(error.getStatus());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
 
         try {
-            objectMapper.writeValue(response.getWriter(), ApiEnvelope.error(apiError));
+            objectMapper.writeValue(response.getWriter(), ApiEnvelope.error(error));
         } catch (IOException ex) {
             log.error("Failed to serialize error response", ex);
         }

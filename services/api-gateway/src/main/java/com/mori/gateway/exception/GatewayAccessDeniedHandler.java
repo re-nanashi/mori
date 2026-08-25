@@ -24,12 +24,12 @@ public class GatewayAccessDeniedHandler implements ServerAccessDeniedHandler {
 
         log.warn("Access denied [{} {}]: {}", method, path, ex.getMessage());
 
-        ApiError apiError = ApiError.of(
+        ApiError error = ApiError.of(
                 ErrorCode.FORBIDDEN,
                 ErrorCode.FORBIDDEN.getDefaultMessage(),
                 path
         );
 
-        return errorResponseWriter.write(exchange, apiError);
+        return errorResponseWriter.write(exchange, error);
     }
 }

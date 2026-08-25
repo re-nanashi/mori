@@ -20,14 +20,14 @@ import reactor.core.publisher.Mono;
 public class GatewayErrorResponseWriter {
     private final ObjectMapper objectMapper;
 
-    public Mono<Void> write(ServerWebExchange exchange, ApiError apiError) {
+    public Mono<Void> write(ServerWebExchange exchange, ApiError error) {
         ServerHttpResponse response = exchange.getResponse();
 
-        response.setStatusCode(HttpStatus.valueOf(apiError.getStatus()));
+        response.setStatusCode(HttpStatus.valueOf(error.getStatus()));
         response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
 
         try {
-            byte[] bytes = objectMapper.writeValueAsBytes(ApiEnvelope.error(apiError));
+            byte[] bytes = objectMapper.writeValueAsBytes(ApiEnvelope.error(error));
             DataBuffer buffer = response.bufferFactory().wrap(bytes);
             return response.writeWith(Mono.just(buffer));
         } catch (JsonProcessingException ex) {

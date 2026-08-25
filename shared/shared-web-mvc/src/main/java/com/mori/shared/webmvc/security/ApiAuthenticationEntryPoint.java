@@ -28,12 +28,12 @@ public class ApiAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
         log.warn("Unauthorized access [{} {}]: {}", method, path, ex.getMessage());
 
-        ApiError apiError = ApiError.of(
+        ApiError error = ApiError.of(
                 ErrorCode.UNAUTHORIZED,
                 ErrorCode.UNAUTHORIZED.getDefaultMessage(),
                 path
         );
 
-        errorResponseWriter.write(response, apiError);
+        errorResponseWriter.write(response, error);
     }
 }

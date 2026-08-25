@@ -28,12 +28,12 @@ public class ApiAccessDeniedHandler implements AccessDeniedHandler {
 
         log.warn("Access denied [{} {}]: {}", method, path, ex.getMessage());
 
-        ApiError apiError = ApiError.of(
+        ApiError error = ApiError.of(
                 ErrorCode.FORBIDDEN,
                 ErrorCode.FORBIDDEN.getDefaultMessage(),
                 path
         );
 
-        errorResponseWriter.write(response, apiError);
+        errorResponseWriter.write(response, error);
     }
 }

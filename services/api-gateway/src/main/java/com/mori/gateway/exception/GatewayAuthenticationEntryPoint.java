@@ -24,12 +24,12 @@ public class GatewayAuthenticationEntryPoint implements ServerAuthenticationEntr
 
         log.warn("Unauthorized access [{} {}]: {}", method, path, ex.getMessage());
 
-        ApiError apiError = ApiError.of(
+        ApiError error = ApiError.of(
                 ErrorCode.UNAUTHORIZED,
                 ErrorCode.UNAUTHORIZED.getDefaultMessage(),
                 path
         );
 
-        return errorResponseWriter.write(exchange, apiError);
+        return errorResponseWriter.write(exchange, error);
     }
 }
