@@ -13,7 +13,7 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>mori-api-gateway</artifactId>
+    <artifactId>api-gateway</artifactId>
     <name>api-gateway</name>
     <description>API Gateway</description>
 
@@ -65,6 +65,13 @@
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
             <version>3.0.1</version>
+        </dependency>
+
+        <!-- Mori common library -->
+        <dependency>
+            <groupId>com.mori</groupId>
+            <artifactId>shared-core</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <!-- Testing -->

@@ -8,3 +8,9 @@ spring:
 eureka:
   instance:
     prefer-ip-address: true
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false

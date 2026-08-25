@@ -11,12 +11,6 @@ spring:
         jwt:
           issuer-uri: https://auth.mori.app/realms/mori # change 'auth.mori.app' to actual domain
 
-springdoc:
-  api-docs:
-    enabled: false
-  swagger-ui:
-    enabled: false
-
 logging:
   level:
     root: WARN

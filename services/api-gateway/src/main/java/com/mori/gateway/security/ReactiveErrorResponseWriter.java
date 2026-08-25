@@ -1,0 +1,38 @@
+package com.mori.gateway.security;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mori.shared.core.response.ApiError;
+import com.mori.shared.core.response.ApiEnvelope;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.stereotype.Component;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
+
+@Slf4j
+@Component
+@RequiredArgsConstructor
+public class ReactiveErrorResponseWriter {
+    private final ObjectMapper objectMapper;
+
+    public Mono<Void> write(ServerWebExchange exchange, ApiError error) {
+        ServerHttpResponse response = exchange.getResponse();
+
+        response.setStatusCode(HttpStatus.valueOf(error.getStatus()));
+        response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
+
+        try {
+            byte[] bytes = objectMapper.writeValueAsBytes(ApiEnvelope.error(error));
+            DataBuffer buffer = response.bufferFactory().wrap(bytes);
+            return response.writeWith(Mono.just(buffer));
+        } catch (JsonProcessingException ex) {
+            log.error("Failed to serialize error response", ex);
+            return response.setComplete();
+        }
+    }
+}
