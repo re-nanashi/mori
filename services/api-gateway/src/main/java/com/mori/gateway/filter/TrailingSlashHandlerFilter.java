@@ -26,7 +26,11 @@ public class TrailingSlashHandlerFilter implements WebFilter {
                     .path(newPath)
                     .build();
 
-            exchange.getAttributes().put(MoriExchangeAttributes.REWRITTEN_PATH_NO_TRAILING_SLASH, newPath);
+            // In some cases, the newPath isn't reflected on the exchange object. Therefore, we store the rewritten
+            // path as an exchange attribute so it can be retrieved later during error handling, allowing users to
+            // see the URI that was actually handled by our system.
+            exchange.getAttributes()
+                    .put(MoriExchangeAttributes.REWRITTEN_PATH_NO_TRAILING_SLASH, newPath);
 
             return chain.filter(exchange.mutate()
                     .request(mutatedRequest)
