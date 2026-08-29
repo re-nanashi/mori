@@ -2,17 +2,19 @@ package com.mori.shared.core.validator;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Slf4j
+@RequiredArgsConstructor
 public class CustomEmailValidator implements ConstraintValidator<ValidEmail, String> {
-    private Pattern pattern;
-    private Matcher matcher;
-
-    private static final String EMAIL_PATTERN =
+    private static final Pattern EMAIL_PATTERN = Pattern.compile(
             "^[_A-Za-z0-9-+]+(\\.[_A-Za-z0-9-]+)*@" +
-                    "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+                    "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$"
+    );
+    private final EmailChecker emailChecker;
 
     @Override
     public boolean isValid(String email, ConstraintValidatorContext context) {
@@ -21,13 +23,20 @@ public class CustomEmailValidator implements ConstraintValidator<ValidEmail, Str
             return true;
         }
 
-        return (validateEmail(email));
-    }
+        if (!EMAIL_PATTERN.matcher(email).matches()) {
+            context.disableDefaultConstraintViolation(); // suppress default message
+            context.buildConstraintViolationWithTemplate("Invalid email format")
+                    .addConstraintViolation();
+            return false;
+        }
 
-    private boolean validateEmail(String email) {
-        pattern = Pattern.compile(EMAIL_PATTERN);
-        matcher = pattern.matcher(email);
+        if (emailChecker.isDisposable(email)) {
+            context.disableDefaultConstraintViolation();
+            context.buildConstraintViolationWithTemplate("Invalid email domain")
+                    .addConstraintViolation();
+            return false;
+        }
 
-        return matcher.matches();
+        return true;
     }
 }
