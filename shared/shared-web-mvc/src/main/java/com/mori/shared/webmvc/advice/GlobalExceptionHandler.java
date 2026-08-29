@@ -11,6 +11,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -20,8 +21,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestControllerAdvice
@@ -56,11 +57,19 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiEnvelope<Void>> handleValidation(MethodArgumentNotValidException ex, HttpServletRequest request) {
         String path = resolvePath(request);
 
-        List<String> details = ex.getBindingResult()
+        Map<String, List<String>> details = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
-                .map(e -> e.getField() + ": " + e.getDefaultMessage())
-                .toList();
+                .collect(Collectors.groupingBy(
+                        this::toSnakeCaseFieldKey,
+                        LinkedHashMap::new,
+                        Collectors.mapping(
+                                fieldError -> fieldError.getDefaultMessage() != null
+                                        ? fieldError.getDefaultMessage()
+                                        : "Invalid value",
+                                Collectors.toList()
+                        )
+                ));
 
         log.debug("Validation failed at {}: {}", path, details);
 
@@ -68,6 +77,18 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.badRequest()
                 .body(ApiEnvelope.error(error));
+    }
+
+    private String toSnakeCaseFieldKey(FieldError fieldError) {
+        String fieldName = fieldError.getField();
+
+        if (fieldName.isBlank()) {
+            return "_global";
+        }
+
+        return fieldName
+                .replaceAll("([a-z])([A-Z])", "$1_$2")
+                .toLowerCase(Locale.ROOT);
     }
 
     // Handle non-existent routes (404)
