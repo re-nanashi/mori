@@ -9,6 +9,7 @@ import lombok.Data;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
@@ -29,7 +30,7 @@ public class ApiError {
     private String message;
     private String path;
     private Instant timestamp;
-    private List<String> details;
+    private Map<String, List<String>> details;
     @JsonProperty("trace_id")
     private String traceId;
 
@@ -53,7 +54,7 @@ public class ApiError {
                 .build();
     }
 
-    public static ApiError of(ErrorCode errorCode, String message, String path, List<String> details) {
+    public static ApiError of(ErrorCode errorCode, String message, String path, Map<String, List<String>> details) {
         return ApiError.builder()
                 .status(errorCode.getStatus().value())
                 .errorCode(errorCode.getCode())
@@ -64,7 +65,7 @@ public class ApiError {
                 .build();
     }
 
-    public static ApiError validation(String path, List<String> details) {
+    public static ApiError validation(String path, Map<String, List<String>> details) {
         return ApiError.builder()
                 .status(ErrorCode.VALIDATION_ERROR.getStatus().value())
                 .errorCode(ErrorCode.VALIDATION_ERROR.getCode())

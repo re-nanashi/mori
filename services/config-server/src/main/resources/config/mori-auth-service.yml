@@ -1,0 +1,36 @@
+keycloak:
+  base-url: http://localhost:8080
+  realm: mori
+  admin:
+    client-id: mori-services
+    client-secret: ${MORI_SERVICES_SECRET}
+  web:
+    client-id: mori-web
+    client-secret: ${MORI_WEB_SECRET}
+
+spring:
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: 6379
+
+# Enable custom data validator auto-configuration
+shared:
+  core:
+    custom-data-validator:
+      enabled: true
+
+resilience4j:
+  retry:
+    instances:
+      keycloak:
+        max-attempts: 3
+        wait-duration: 1s
+        exponential-backoff-multiplier: 2
+        retry-exceptions:
+          - java.io.IOException
+          - java.net.ConnectException
+          - org.springframework.web.client.ResourceAccessException
+          - org.springframework.web.client.HttpServerErrorException
+        ignore-exceptions:
+          - org.springframework.web.client.HttpClientErrorException
